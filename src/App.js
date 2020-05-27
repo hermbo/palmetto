@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import Search from './Search.js';
+import './App.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExternalLinkAlt, faCaretDown } from '@fortawesome/free-solid-svg-icons'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+
+  state = {
+    saved: []
+  }
+
+  setSavedResult = (result) => {
+    // Store the saved result
+    if (!this.state.saved.includes(result))
+      this.setState(prevState => ({
+        saved: [...prevState.saved, result]
+      }))
+  }
+
+  render() {
+    return (
+      <section className="Search">
+        <div className="col-6">
+          <Search
+            saved={this.state.saved}
+            liftSavedResult={this.setSavedResult}
+          />
+        </div>
+
+        <div className="col-4">
+          <h3>Saved</h3>
+          <ul className="Search-saved">
+            {this.state.saved.map(result => {
+              return (
+                <li key={result.id}>
+                  <a href={result.pageURL}>#{result.id}
+                    <FontAwesomeIcon className="icon" icon={faExternalLinkAlt} />
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      </section>
+    );
+  }
+
 }
 
 export default App;
